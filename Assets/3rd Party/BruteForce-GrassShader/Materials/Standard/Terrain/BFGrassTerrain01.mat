@@ -2,14 +2,18 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BFGrassTerrain01
   m_Shader: {fileID: 4800000, guid: 0108bd98254aa52449e692c4eb92def0, type: 3}
-  m_ShaderKeywords: USE_RT USE_SC _RTEFFECT_ON
+  m_ValidKeywords:
+  - USE_RT
+  - USE_SC
+  m_InvalidKeywords:
+  - _RTEFFECT_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -28,17 +32,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Control0:
-        m_Texture: {fileID: -3973170717174270421, guid: 9ffdee09e9c0fa14282beaf12403978d,
-          type: 2}
+        m_Texture: {fileID: -5743701515318386548, guid: 0e7f5029287b7664fafb0e97a86c86ab, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Control1:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: -6955140093143798536, guid: 0e7f5029287b7664fafb0e97a86c86ab, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Control2:
-        m_Texture: {fileID: -3973170717174270421, guid: 9ffdee09e9c0fa14282beaf12403978d,
-          type: 2}
+        m_Texture: {fileID: -3973170717174270421, guid: 9ffdee09e9c0fa14282beaf12403978d, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -158,7 +160,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 1}
     - _Splat6:
-        m_Texture: {fileID: 2800000, guid: 27893100cc1f09647b28e099d53741ab, type: 3}
+        m_Texture: {fileID: 2800000, guid: 312b3c84e725b884fbf388d04107c2d0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 1}
     - _Splat7:
@@ -166,8 +168,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 1}
     - _SplatMap:
-        m_Texture: {fileID: -3973170717174270421, guid: 9ffdee09e9c0fa14282beaf12403978d,
-          type: 2}
+        m_Texture: {fileID: -3973170717174270421, guid: 9ffdee09e9c0fa14282beaf12403978d, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureA:
@@ -186,6 +187,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _BiPlanarSize: 1
     - _BiPlanarStrength: 0.75
@@ -266,11 +268,12 @@ Material:
     - _Specular3: {r: 1, g: 1, b: 1, a: 1}
     - _Specular4: {r: 1, g: 0.7783019, b: 0.7783019, a: 1}
     - _Specular5: {r: 0.879, g: 0.879, b: 0.879, a: 1}
-    - _Specular6: {r: 1, g: 0.7349295, b: 0.6367924, a: 1}
+    - _Specular6: {r: 0.8301887, g: 0.747953, b: 0.6069776, a: 1}
     - _Specular7: {r: 1, g: 0.7349295, b: 0.6367924, a: 1}
     - _Splat0_S: {r: 1, g: 1, b: 0, a: 1}
     - _Splat4_STA: {r: 1, g: 1, b: 1.5, a: 1}
-    - _Splat4_STn: {r: 1, g: 1, b: 3, a: 4.98}
-    - _Splat5_STn: {r: 1, g: 1, b: 3.81, a: 1.06}
-    - _Splat6_STn: {r: 1, g: 1, b: 1, a: 1.68}
+    - _Splat4_STn: {r: 1, g: 1, b: 6.28, a: 4.98}
+    - _Splat5_STn: {r: 1, g: 1, b: 14.65, a: 0.8}
+    - _Splat6_STn: {r: 1, g: 1, b: 80.4, a: 0.95}
     - _Splat7_STn: {r: 1, g: 1, b: 1, a: 1.68}
+  m_BuildTextureStacks: []
