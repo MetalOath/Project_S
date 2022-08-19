@@ -130,7 +130,6 @@ Shader "BruteForceHDRP/InteractiveGrassHDRP"
 #pragma shader_feature_local _ _EMISSIVE_MAPPING_PLANAR _EMISSIVE_MAPPING_TRIPLANAR
 #pragma shader_feature_local _ _MAPPING_PLANAR _MAPPING_TRIPLANAR
 #pragma shader_feature_local _NORMALMAP_TANGENT_SPACE
-#pragma shader_feature_local _ _REQUIRE_UV2 _REQUIRE_UV3
 
 #pragma shader_feature_local _NORMALMAP
 #pragma shader_feature_local _MASKMAP
@@ -241,10 +240,9 @@ ENDHLSL
 
 			// excluded shader from OpenGL ES 2.0 because it uses non-square matrices, if you need it to work on ES 2.0 comment the line below
 			#define UNITY_MATERIAL_LIT // Need to be define before including Material.hlsl
-			#pragma exclude_renderers gles
+			//#pragma exclude_renderers gles
 			#pragma multi_compile_fog
-			#pragma multi_compile_instancing
-			#pragma prefer_hlslcc gles
+			//#pragma prefer_hlslcc gles
 			#pragma shader_feature USE_RT
 			#pragma shader_feature USE_PR
 			#pragma shader_feature USE_SC
@@ -253,7 +251,7 @@ ENDHLSL
 			#pragma shader_feature USE_TP
 			#pragma shader_feature USE_SS
 			#pragma shader_feature USE_CS
-			#pragma ATTRIBUTES_NEED_TANGENT
+			//#pragma ATTRIBUTES_NEED_TANGENT
 			//enable GPU instancing support
 			#pragma multi_compile_instancing
 			#pragma instancing_options renderinglayer
@@ -282,6 +280,7 @@ ENDHLSL
 				float4 vertex : POSITION;
 				float2 uv : TEXCOORD0;
 				float3 normal : NORMAL;
+				float4 color : COLOR;
 #ifdef USE_VR
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 #endif
@@ -332,12 +331,6 @@ ENDHLSL
 #ifdef ATTRIBUTES_NEED_TEXCOORD1
 				float2 uv1          : TEXCOORD1;
 #endif
-#ifdef ATTRIBUTES_NEED_TEXCOORD2
-				float2 uv2          : TEXCOORD2;
-#endif
-#ifdef ATTRIBUTES_NEED_TEXCOORD3
-				float2 uv3          : TEXCOORD3;
-#endif
 				float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
 
 				float4 color        : COLOR;
@@ -360,12 +353,6 @@ ENDHLSL
 #endif
 #ifdef ATTRIBUTES_NEED_TEXCOORD1
 				am.uv1 = input.uv1;
-#endif
-#ifdef ATTRIBUTES_NEED_TEXCOORD2
-				am.uv2 = input.uv2;
-#endif
-#ifdef ATTRIBUTES_NEED_TEXCOORD3
-				am.uv3 = input.uv3;
 #endif
 				am.color = input.color;
 
@@ -456,11 +443,14 @@ ENDHLSL
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 #endif
 				o.positionOS = v.vertex;
+				o.previousPositionOS = v.vertex;
 				o.uv0 = TRANSFORM_TEX(v.uv, _MainTex);
 				o.uv1 = float2( GetAbsolutePositionWS(TransformObjectToWorld(v.vertex)).x, GetAbsolutePositionWS(TransformObjectToWorld(v.vertex)).z);
 
 				o.normalOS = v.normal;
-				return o;
+				o.tangentOS = 0;
+				o.color = v.color;
+				return o; 
 			}
 			#define UnityObjectToWorld(o) mul(unity_ObjectToWorld, float4(o.xyz,1.0))
 #ifdef USE_SS

@@ -8,6 +8,7 @@ Shader "BruteForceHDRP/InteractiveGrassTerrainHDRP"
 	{// Terrain properties //
 		[HideInInspector] _Control0("Control0 (RGBA)", 2D) = "white" {}
 		[HideInInspector] _Control1("Control1 (RGBA)", 2D) = "white" {}
+		[HideInInspector] _TerrainHolesTexture("TerrainHolesTexture", 2D) = "white" {}
 		// Textures
 		[HideInInspector] _Splat0("Layer 0 (R)", 2D) = "white" {}
 		[HideInInspector] _Splat1("Layer 1 (G)", 2D) = "white" {}
@@ -269,8 +270,6 @@ ENDHLSL
 			Name "GBuffer"
 			Tags{ "RenderPipeline" = "HDRenderPipeline" "RenderType" = "HDLitShader"  "LightMode" = "GBuffer"}
 			//Tags{ "LightMode" = "GBuffer"}
-				  Cull[_CullMode]
-				  ZTest[_ZTestGBuffer]
 
 			// I highly doubt this is the right way to avoid z-fighting but it does help people avoid getting epilepsy
 			Offset -0.01, -0.01
@@ -287,10 +286,9 @@ ENDHLSL
 
 			// excluded shader from OpenGL ES 2.0 because it uses non-square matrices, if you need it to work on ES 2.0 comment the line below
 			#define UNITY_MATERIAL_LIT // Need to be define before including Material.hlsl
-			#pragma exclude_renderers gles
+			//#pragma exclude_renderers gles
 			#pragma multi_compile_fog
-			#pragma multi_compile_instancing
-			#pragma prefer_hlslcc gles
+			//#pragma prefer_hlslcc gles
 			#pragma shader_feature USE_RT
 			#pragma shader_feature USE_SC
 			#pragma shader_feature USE_VR
@@ -299,7 +297,7 @@ ENDHLSL
 			#pragma shader_feature USE_BMP
 			#pragma shader_feature USE_BP
 			#pragma shader_feature USE_CS
-			#pragma ATTRIBUTES_NEED_TANGENT
+			//#pragma ATTRIBUTES_NEED_TANGENT
 			//enable GPU instancing support
 			#pragma multi_compile_instancing
 			#pragma instancing_options renderinglayer
@@ -334,6 +332,7 @@ ENDHLSL
 #ifdef LIGHTMAP_ON
 					half4 texcoord1 : TEXCOORD1;
 #endif
+				float4 color : COLOR;
 			};
 
 			
@@ -378,12 +377,6 @@ ENDHLSL
 #ifdef ATTRIBUTES_NEED_TEXCOORD1
 				float2 uv1          : TEXCOORD1;
 #endif
-#ifdef ATTRIBUTES_NEED_TEXCOORD2
-				float2 uv2          : TEXCOORD2;
-#endif
-#ifdef ATTRIBUTES_NEED_TEXCOORD3
-				float2 uv3          : TEXCOORD3;
-#endif
 				float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
 
 				float4 color        : COLOR;
@@ -406,12 +399,6 @@ ENDHLSL
 #endif
 #ifdef ATTRIBUTES_NEED_TEXCOORD1
 				am.uv1 = input.uv1;
-#endif
-#ifdef ATTRIBUTES_NEED_TEXCOORD2
-				am.uv2 = input.uv2;
-#endif
-#ifdef ATTRIBUTES_NEED_TEXCOORD3
-				am.uv3 = input.uv3;
 #endif
 				am.color = input.color;
 
@@ -466,6 +453,7 @@ ENDHLSL
 
 			Texture2D _Control0;
 			Texture2D _Control1;
+			sampler2D _TerrainHolesTexture;
 			half4 _Specular0, _Specular1, _Specular2, _Specular3, _Specular4, _Specular5, _Specular6, _Specular7;
 			float4 _Splat0_ST, _Splat1_ST, _Splat2_ST, _Splat3_ST, _Splat4_STn, _Splat5_STn, _Splat6_STn, _Splat7_STn;
 			half _Metallic0, _Metallic1, _Metallic2, _Metallic3, _Metallic4, _Metallic5, _Metallic6, _Metallic7;
@@ -496,10 +484,13 @@ ENDHLSL
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 #endif
 				o.positionOS = v.vertex;
+				o.previousPositionOS = v.vertex;
 				o.uv0 = TRANSFORM_TEX(v.uv, _MainTex);
 				o.uv1 = float2( GetAbsolutePositionWS(TransformObjectToWorld(v.vertex)).x, GetAbsolutePositionWS(TransformObjectToWorld(v.vertex)).z);
 
 				o.normalOS = v.normal;
+				o.tangentOS = 0;
+				o.color = v.color;
 				return o;
 			}
 			#define UnityObjectToWorld(o) mul(unity_ObjectToWorld, float4(o.xyz,1.0))
@@ -561,9 +552,16 @@ ENDHLSL
 					float3 n1 = v1.normalOS;
 					float3 n2 = v2.normalOS;
 
+					half4 hole_control = tex2Dlod(_TerrainHolesTexture, float4((v0.uv0 + v1.uv0 + v2.uv0) / 3, 0, 0));
+					if (hole_control.r < 0.2f)
+					{
+						return;
+					}
+
 					tristream.Append(VertexOutput(v0, p0, p0_prev, n0));
 					tristream.Append(VertexOutput(v1, p1, p1_prev, n1));
 					tristream.Append(VertexOutput(v2, p2, p2_prev, n2));
+
 					//tristream.Append(o);
 				}
 				tristream.RestartStrip();
@@ -640,7 +638,8 @@ ENDHLSL
 
 							o.texCoord1 = float4(GetAbsolutePositionWS(TransformObjectToWorld(p0)).x, GetAbsolutePositionWS(TransformObjectToWorld(p0)).z, 0,0);
 							//o.texCoord2 = float4(GetAbsolutePositionWS(TransformObjectToWorld(p0)).y, 0, 0,0);
-							
+
+
 							tristream.Append(VertexOutput(v0, p0, p0_prev, n0));
 							tristream.Append(VertexOutput(v1, p1, p1_prev, n1));
 							tristream.Append(VertexOutput(v2, p2, p2_prev, n2));
@@ -868,7 +867,6 @@ ENDHLSL
 			Tags{ "LightMode" = "DepthOnly" }
 			//Tags{"RenderPipeline" = "HDRenderPipeline" "RenderType" = "HDLitShader" "LightMode" = "DepthOnly" }
 
-			Cull[_CullMode]
 
 			// To be able to tag stencil with disableSSR information for forward
 			Stencil
@@ -1019,6 +1017,7 @@ ENDHLSL
 		Texture2D _Normal5;
 		Texture2D _Normal6;
 		Texture2D _Normal7;
+		sampler2D _TerrainHolesTexture;
 
 		
 
@@ -1066,6 +1065,11 @@ ENDHLSL
 				o.color = 0.0 + _GrassCut;
 				o.normal = normalize(mul(UNITY_MATRIX_I_M, float4(input[i].normal, 0.0)).xyz);
 				o.worldPos = GetAbsolutePositionWS(TransformObjectToWorld(input[i].objPos.xyz)).xyz;
+				half4 hole_control = tex2Dlod(_TerrainHolesTexture, float4(o.uv, 0, 0));
+				if (hole_control.r < 0.2f)
+				{
+					return;
+				}
 				
 				tristream.Append(o);
 			}
@@ -1309,8 +1313,6 @@ ENDHLSL
 			//Tags{"RenderPipeline" = "HDRenderPipeline" "RenderType" = "HDLitShader" "LightMode" = "ShadowCaster" }
 			Tags{"LightMode" = "ShadowCaster" }
 
-			//Cull[_CullMode]
-			Cull[_CullMode]
 
 			// To be able to tag stencil with disableSSR information for forward
 			Stencil
@@ -1477,6 +1479,7 @@ ENDHLSL
 		Texture2D _Normal5;
 		Texture2D _Normal6;
 		Texture2D _Normal7;
+		sampler2D _TerrainHolesTexture;
 
 
 		v2g vert(appdata v)
@@ -1515,6 +1518,11 @@ ENDHLSL
 				o.normal = normalize(mul(UNITY_MATRIX_I_M, float4(input[i].normal, 0.0)).xyz);
 				o.worldPos = GetAbsolutePositionWS(TransformObjectToWorld(input[i].objPos));
 				o.shadowCoord = input[i].shadowCoord;
+				half4 hole_control = tex2Dlod(_TerrainHolesTexture, float4(o.uv, 0, 0));
+				if (hole_control.r < 0.2f)
+				{
+					return;
+				}
 				tristream.Append(o);
 			}
 			tristream.RestartStrip();
