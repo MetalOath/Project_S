@@ -184,7 +184,9 @@ namespace StarterAssets
                 transform.position.z);
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
                 QueryTriggerInteraction.Ignore);
-
+            
+            playerAnimator.SetBool("IsGrounded", Grounded);
+            
             // update animator if using character
             if (_hasAnimator)
             {
@@ -329,7 +331,7 @@ namespace StarterAssets
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-
+                    
                     // update animator if using character
                     if (_hasAnimator)
                     {

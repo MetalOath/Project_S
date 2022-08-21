@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace StarterAssets
 {
-    public class CharMotionAnim : MonoBehaviour
+    public class PlayerAnimationTriggers : MonoBehaviour
     {
         public Animator anim;
         public StarterAssetsInputs input;
@@ -42,6 +42,11 @@ namespace StarterAssets
             if (Keyboard.current.zKey.wasPressedThisFrame)
             {
                 anim.SetBool("Armed", !anim.GetBool("Armed"));
+            }
+
+            if (Keyboard.current.spaceKey.wasPressedThisFrame)
+            {
+                anim.SetTrigger("Jump");
             }
         }
     }
