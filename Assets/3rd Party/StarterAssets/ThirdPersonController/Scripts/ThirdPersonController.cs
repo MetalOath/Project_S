@@ -190,6 +190,20 @@ namespace StarterAssets
             if (!Grounded)
             {
                 playerAnimator.SetFloat("Speed Multiplier", 0.3f);
+
+                if (playerAnimator.GetBool("Aiming"))
+                {
+                    Time.timeScale = 0.25f;
+                }
+                else
+                {
+                    Time.timeScale = 1f;
+                }
+            }
+
+            if (Grounded && Time.timeScale != 1f)
+            {
+                Time.timeScale = 1f;
             }
             
             // update animator if using character
