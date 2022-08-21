@@ -186,6 +186,11 @@ namespace StarterAssets
                 QueryTriggerInteraction.Ignore);
             
             playerAnimator.SetBool("IsGrounded", Grounded);
+
+            if (!Grounded)
+            {
+                playerAnimator.SetFloat("Speed Multiplier", 0.3f);
+            }
             
             // update animator if using character
             if (_hasAnimator)
@@ -229,6 +234,15 @@ namespace StarterAssets
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+
+            if (_input.sprint && Grounded)
+            {
+                playerAnimator.SetFloat("Speed Multiplier", 1.2f);
+            }
+            else if (!_input.sprint && Grounded)
+            {
+                playerAnimator.SetFloat("Speed Multiplier", 1f);
+            }
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
