@@ -202,6 +202,16 @@ namespace StarterAssets
 
                 _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+                
+                if(_input.move == Vector2.zero && playerAnimator.GetBool("Aiming"))
+                {
+                    float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _mainCamera.transform.eulerAngles.y, ref _rotationVelocity, RotationSmoothTime);
+                
+                    //Debug.Log(rotation);
+
+                    // rotate to face camera look direction
+                    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                }
             }
 
             // clamp our rotations so our values are limited 360 degrees
@@ -272,12 +282,10 @@ namespace StarterAssets
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                   _mainCamera.transform.eulerAngles.y;
                 rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _mainCamera.transform.eulerAngles.y, ref _rotationVelocity, RotationSmoothTime);
-
-                //rotation = _mainCamera.transform.localEulerAngles.y;
                 
-                Debug.Log(rotation);
+                //Debug.Log(rotation);
 
-                // rotate to face input direction relative to camera position
+                // rotate to face camera look direction
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
 
