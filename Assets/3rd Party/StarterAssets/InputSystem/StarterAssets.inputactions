@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Sheath/Unsheath",
+                    "name": "Sheath",
                     "type": "Button",
                     "id": "c8b6d4d1-ee32-40b6-ba00-c204d1b26f72",
                     "expectedControlType": "Button",
@@ -235,7 +235,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Sheath/Unsheath",
+                    "action": "Sheath",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

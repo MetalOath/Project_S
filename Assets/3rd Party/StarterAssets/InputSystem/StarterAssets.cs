@@ -66,7 +66,7 @@ namespace StarterAssets
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Sheath/Unsheath"",
+                    ""name"": ""Sheath"",
                     ""type"": ""Button"",
                     ""id"": ""c8b6d4d1-ee32-40b6-ba00-c204d1b26f72"",
                     ""expectedControlType"": ""Button"",
@@ -259,7 +259,7 @@ namespace StarterAssets
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Sheath/Unsheath"",
+                    ""action"": ""Sheath"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -322,7 +322,7 @@ namespace StarterAssets
             m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
-            m_Player_SheathUnsheath = m_Player.FindAction("Sheath/Unsheath", throwIfNotFound: true);
+            m_Player_Sheath = m_Player.FindAction("Sheath", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -386,7 +386,7 @@ namespace StarterAssets
         private readonly InputAction m_Player_Look;
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Sprint;
-        private readonly InputAction m_Player_SheathUnsheath;
+        private readonly InputAction m_Player_Sheath;
         public struct PlayerActions
         {
             private @StarterAssets m_Wrapper;
@@ -395,7 +395,7 @@ namespace StarterAssets
             public InputAction @Look => m_Wrapper.m_Player_Look;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
-            public InputAction @SheathUnsheath => m_Wrapper.m_Player_SheathUnsheath;
+            public InputAction @Sheath => m_Wrapper.m_Player_Sheath;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -417,9 +417,9 @@ namespace StarterAssets
                     @Sprint.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
                     @Sprint.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
                     @Sprint.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
-                    @SheathUnsheath.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSheathUnsheath;
-                    @SheathUnsheath.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSheathUnsheath;
-                    @SheathUnsheath.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSheathUnsheath;
+                    @Sheath.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSheath;
+                    @Sheath.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSheath;
+                    @Sheath.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSheath;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -436,9 +436,9 @@ namespace StarterAssets
                     @Sprint.started += instance.OnSprint;
                     @Sprint.performed += instance.OnSprint;
                     @Sprint.canceled += instance.OnSprint;
-                    @SheathUnsheath.started += instance.OnSheathUnsheath;
-                    @SheathUnsheath.performed += instance.OnSheathUnsheath;
-                    @SheathUnsheath.canceled += instance.OnSheathUnsheath;
+                    @Sheath.started += instance.OnSheath;
+                    @Sheath.performed += instance.OnSheath;
+                    @Sheath.canceled += instance.OnSheath;
                 }
             }
         }
@@ -485,7 +485,7 @@ namespace StarterAssets
             void OnLook(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnSprint(InputAction.CallbackContext context);
-            void OnSheathUnsheath(InputAction.CallbackContext context);
+            void OnSheath(InputAction.CallbackContext context);
         }
     }
 }
