@@ -12,12 +12,17 @@ namespace StarterAssets
         public Animator anim;
         public StarterAssetsInputs input;
 
-        public GameObject backBow, armedBow;
-    
+        public GameObject backBow, armedBow, shootingPoint;
+
+        public GameObject arrowPrefab;
+
+        private GameObject _mainCamera;
+        
         // Start is called before the first frame update
         void Start()
         {
             anim = GetComponent<Animator>();
+            _mainCamera = GameObject.FindWithTag("MainCamera");
         }
 
         // Update is called once per frame
@@ -61,6 +66,13 @@ namespace StarterAssets
             {
                 anim.SetTrigger("Jump");
             }
+        }
+
+        public void ShootArrow()
+        {
+            Instantiate(arrowPrefab, shootingPoint.transform.position, shootingPoint.transform.rotation);
+
+            //Instantiate(arrowPrefab, shootingPoint.transform.position, Quaternion.Euler(_mainCamera.transform.eulerAngles));
         }
     }
 }

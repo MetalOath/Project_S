@@ -17,13 +17,7 @@ public class Arrow : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.AddRelativeForce(0, shootingForce, 0);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
     private void OnCollisionEnter(Collision collision)
     {
         rb.isKinematic = true;
