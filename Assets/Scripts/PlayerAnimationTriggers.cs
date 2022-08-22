@@ -11,6 +11,8 @@ namespace StarterAssets
     {
         public Animator anim;
         public StarterAssetsInputs input;
+
+        public GameObject backBow, armedBow;
     
         // Start is called before the first frame update
         void Start()
@@ -37,6 +39,17 @@ namespace StarterAssets
             else
             {
                 anim.SetBool("Aiming", false);
+            }
+
+            if (anim.GetBool("Armed"))
+            {
+                backBow.SetActive(false);
+                armedBow.SetActive(true);
+            }
+            else
+            {
+                backBow.SetActive(true);
+                armedBow.SetActive(false);
             }
 
             if (Keyboard.current.zKey.wasPressedThisFrame)
