@@ -132,6 +132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
   shootingForce: 500
+  destroyAfterSeconds: 15
   weight: {fileID: 1511296442}
 --- !u!138 &2601711066415561957
 FixedJoint:

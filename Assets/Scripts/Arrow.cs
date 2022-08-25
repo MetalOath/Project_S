@@ -7,7 +7,7 @@ public class Arrow : MonoBehaviour
 {
     public Rigidbody rb;
 
-    public float shootingForce;
+    public float shootingForce, destroyAfterSeconds;
 
     public GameObject weight;
     
@@ -22,5 +22,17 @@ public class Arrow : MonoBehaviour
     {
         rb.isKinematic = true;
         Destroy(weight);
+        StartCoroutine(ArrowDistroyTimer(destroyAfterSeconds));
+    }
+    
+    IEnumerator ArrowDistroyTimer(float waitTime)
+    {
+        //Do something before waiting.
+
+        //yield on a new YieldInstruction that waits for X seconds.
+        yield return new WaitForSeconds(waitTime);
+
+        //Do something after waiting.
+        Destroy(gameObject);
     }
 }
