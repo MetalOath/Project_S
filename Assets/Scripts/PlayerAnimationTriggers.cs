@@ -66,6 +66,14 @@ namespace StarterAssets
             {
                 anim.SetTrigger("Jump");
             }
+
+            if (Mouse.current.rightButton.wasPressedThisFrame)
+            {
+                if (!anim.GetBool("IsGrounded"))
+                {
+                    anim.SetTrigger("FallToAim");
+                }
+            }
         }
 
         public void ShootArrow()
