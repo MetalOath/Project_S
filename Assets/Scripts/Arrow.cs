@@ -21,6 +21,7 @@ public class Arrow : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         rb.isKinematic = true;
+        gameObject.transform.SetParent(collision.transform);
         Destroy(weight);
         StartCoroutine(ArrowDistroyTimer(destroyAfterSeconds));
     }
