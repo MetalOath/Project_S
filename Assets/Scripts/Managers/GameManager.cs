@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
+    public GameObject healthBar, pauseMenu;
+    
     protected override void Awake()
     {
         base.Awake();
@@ -23,10 +25,11 @@ public class GameManager : Singleton<GameManager>
     {
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            if (SceneManager.GetActiveScene().name == "SampleScene")
-                SceneManager.LoadScene("MainMenu");
-            else
-                SceneManager.LoadScene("SampleScene");
+            pauseMenu.SetActive(true);
+
+            Time.timeScale = 0;
+            
+            
         }
         
     }
