@@ -9,7 +9,7 @@ public class Arrow : MonoBehaviour
 
     public float shootingForce, destroyAfterSeconds;
 
-    public GameObject weight, boomPrefab;
+    public GameObject weight, boomPrefab, hitPrefab;
     
     // Start is called before the first frame update
     void Start()
@@ -23,6 +23,7 @@ public class Arrow : MonoBehaviour
         rb.isKinematic = true;
         gameObject.transform.SetParent(collision.transform);
         Destroy(weight);
+        Instantiate(hitPrefab, collision.GetContact(0).point, transform.rotation * Quaternion.Euler(90,0,0));
         StartCoroutine(ArrowDistroyTimer(destroyAfterSeconds));
 
         if (collision.gameObject.CompareTag("Enemy"))

@@ -135,6 +135,7 @@ MonoBehaviour:
   destroyAfterSeconds: 15
   weight: {fileID: 1511296442}
   boomPrefab: {fileID: 4914716930404006884, guid: aed12c224fbc8704d8eaa07a52e88f44, type: 3}
+  hitPrefab: {fileID: 3432958286849152088, guid: 87ee7299dd44ed747af24dbb91bcd33b, type: 3}
 --- !u!138 &2601711066415561957
 FixedJoint:
   m_ObjectHideFlags: 0
