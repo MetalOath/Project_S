@@ -24,6 +24,11 @@ public class Arrow : MonoBehaviour
         gameObject.transform.SetParent(collision.transform);
         Destroy(weight);
         StartCoroutine(ArrowDistroyTimer(destroyAfterSeconds));
+
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(collision.gameObject);
+        }
     }
     
     IEnumerator ArrowDistroyTimer(float waitTime)

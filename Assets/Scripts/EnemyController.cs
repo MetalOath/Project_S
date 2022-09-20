@@ -37,6 +37,8 @@ public class EnemyController : MonoBehaviour
         {
             agent.SetDestination(transform.position);
             
+            transform.LookAt(player.transform);
+            
             anim.SetTrigger("Attack");
         }
         else
