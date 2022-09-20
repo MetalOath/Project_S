@@ -189,15 +189,15 @@ namespace StarterAssets
 
             if (!Grounded)
             {
-                playerAnimator.SetFloat("Speed Multiplier", 0.3f);
-
                 if (playerAnimator.GetBool("Aiming"))
                 {
                     Time.timeScale = 0.25f;
+                    playerAnimator.SetFloat("Speed Multiplier", 0.3f);
                 }
                 else
                 {
                     Time.timeScale = 1f;
+                    playerAnimator.SetFloat("Speed Multiplier", 1f);
                 }
             }
 
@@ -246,17 +246,45 @@ namespace StarterAssets
 
         private void Move()
         {
+            float targetSpeed, normalAnimationSpeed = 1f, sprintAnimationSpeed = 1f;
+
+            float animationSpeed;
+            
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+            if (playerAnimator.GetBool("Armed"))
+            {
+                targetSpeed = _input.sprint ? SprintSpeed/2 : MoveSpeed/2;
+                //playerAnimator.SetFloat("Speed Multiplier", 0.8f);
+                normalAnimationSpeed = 0.8f;
+            } 
+            else if (playerAnimator.GetBool("Aiming"))
+            {
+                targetSpeed = _input.sprint ? SprintSpeed/2 : MoveSpeed/2;
+                //playerAnimator.SetFloat("Speed Multiplier", 0.8f);
+                normalAnimationSpeed = 0.8f;
+            }
+            else
+            {
+                targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+                //playerAnimator.SetFloat("Speed Multiplier", 1f);
+                normalAnimationSpeed = 1f;
+            }
+            //float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 
             if (_input.sprint && Grounded)
             {
-                playerAnimator.SetFloat("Speed Multiplier", 1.2f);
+                //playerAnimator.SetFloat("Speed Multiplier", 1.2f);
+                sprintAnimationSpeed = 1.2f;
             }
             else if (!_input.sprint && Grounded)
             {
-                playerAnimator.SetFloat("Speed Multiplier", 1f);
+                //playerAnimator.SetFloat("Speed Multiplier", 1f);
+                sprintAnimationSpeed = 1f;
             }
+
+            animationSpeed = normalAnimationSpeed * sprintAnimationSpeed;
+            
+            playerAnimator.SetFloat("Speed Multiplier", animationSpeed);
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
