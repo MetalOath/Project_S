@@ -9,7 +9,7 @@ public class Arrow : MonoBehaviour
 
     public float shootingForce, destroyAfterSeconds;
 
-    public GameObject weight;
+    public GameObject weight, boomPrefab;
     
     // Start is called before the first frame update
     void Start()
@@ -27,6 +27,7 @@ public class Arrow : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Enemy"))
         {
+            Instantiate(boomPrefab, transform.position, transform.rotation);
             Destroy(collision.gameObject);
         }
     }
